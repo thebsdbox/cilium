@@ -188,12 +188,16 @@ jobs:
             ipfamily: 'ipv4'
             encryption: 'disabled'
             kube-proxy: 'iptables'
+            cm-auth-mode-1: 'legacy'
+            cm-auth-mode-2: 'legacy'
 
           - name: '2'
             tunnel: 'disabled'
             ipfamily: 'ipv4'
             encryption: 'wireguard'
             kube-proxy: 'none'
+            cm-auth-mode-1: 'migration'
+            cm-auth-mode-2: 'migration'
 
           # IPsec encryption cannot be used with BPF NodePort.
           - name: '3'
@@ -201,6 +205,8 @@ jobs:
             ipfamily: 'ipv4'
             encryption: 'ipsec'
             kube-proxy: 'iptables'
+            cm-auth-mode-1: 'cluster'
+            cm-auth-mode-2: 'cluster'
 
           # IPsec encryption is currently not supported in case of ipv6-only clusters (#23553)
           # Wireguard encryption is currently affected by a bug in case of ipv6-only clusters (#23917)
@@ -209,6 +215,8 @@ jobs:
             ipfamily: 'ipv6'
             encryption: 'disabled'
             kube-proxy: 'none'
+            cm-auth-mode-1: 'legacy'
+            cm-auth-mode-2: 'migration'
 
           # IPsec encryption cannot be used with BPF NodePort.
           - name: '5'
@@ -216,18 +224,24 @@ jobs:
             ipfamily: 'dual'
             encryption: 'ipsec'
             kube-proxy: 'iptables'
+            cm-auth-mode-1: 'migration'
+            cm-auth-mode-2: 'cluster'
 
           - name: '6'
             tunnel: 'vxlan'
             ipfamily: 'ipv4'
             encryption: 'disabled'
             kube-proxy: 'none'
+            cm-auth-mode-1: 'cluster'
+            cm-auth-mode-2: 'cluster'
 
           - name: '7'
             tunnel: 'vxlan'
             ipfamily: 'ipv4'
             encryption: 'wireguard'
             kube-proxy: 'iptables'
+            cm-auth-mode-1: 'cluster'
+            cm-auth-mode-2: 'cluster'
 
           # IPsec encryption cannot be used with BPF NodePort.
           - name: '8'
@@ -235,6 +249,8 @@ jobs:
             ipfamily: 'ipv4'
             encryption: 'ipsec'
             kube-proxy: 'iptables'
+            cm-auth-mode-1: 'cluster'
+            cm-auth-mode-2: 'cluster'
 
         # Tunneling is currently not supported in case of ipv6-only clusters (#17240)
         #  - name: '9'
@@ -242,12 +258,16 @@ jobs:
         #    ipfamily: 'ipv6'
         #    encryption: 'disabled'
         #    kube-proxy: 'none'
+        #    cm-auth-mode-1: 'cluster'
+        #    cm-auth-mode-2: 'cluster'
 
           - name: '10'
             tunnel: 'vxlan'
             ipfamily: 'dual'
             encryption: 'wireguard'
             kube-proxy: 'iptables'
+            cm-auth-mode-1: 'cluster'
+            cm-auth-mode-2: 'cluster'
 
     steps:
     - name: Checkout GitHub main
@@ -442,7 +462,8 @@ jobs:
           ${{ steps.vars.outputs.cilium_install_defaults }} \
           --helm-set cluster.name=${{ env.clusterName1 }} \
           --helm-set cluster.id=1 \
-          --helm-set clustermesh.apiserver.service.nodePort=32379
+          --helm-set clustermesh.apiserver.service.nodePort=32379 \
+          --helm-set clustermesh.apiserver.tls.authMode=${{ matrix.cm-auth-mode-1 }}
 
     - name: Copy the Cilium CA secret to cluster2, as they must match
       run: |
@@ -457,7 +478,8 @@ jobs:
           ${{ steps.vars.outputs.cilium_install_defaults }} \
           --helm-set cluster.name=${{ env.clusterName2 }} \
           --helm-set cluster.id=255 \
-          --helm-set clustermesh.apiserver.service.nodePort=32380
+          --helm-set clustermesh.apiserver.service.nodePort=32380 \
+          --helm-set clustermesh.apiserver.tls.authMode=${{ matrix.cm-auth-mode-2 }}
 
     - name: Wait for cluster mesh status to be ready
       run: |
