@@ -64,7 +64,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  clusterName: ${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
+  clusterName: ${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}-${{ github.run_attempt }}
   zone: us-west2-a
   k8s_version: 1.24
   # renovate: datasource=github-releases depName=cilium/cilium-cli
