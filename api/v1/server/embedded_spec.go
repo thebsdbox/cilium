@@ -3446,7 +3446,9 @@ func init() {
             "Disabled",
             "Strict",
             "Probe",
-            "Partial"
+            "Partial",
+            "True",
+            "False"
           ]
         }
       }
@@ -8516,7 +8518,9 @@ func init() {
             "Disabled",
             "Strict",
             "Probe",
-            "Partial"
+            "Partial",
+            "True",
+            "False"
           ]
         }
       }
