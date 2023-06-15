@@ -333,6 +333,12 @@ Annotations:
   Egress rules in CiliumNetworkPolicy CRD. The old attribute name is no longer supported,
   please update your CiliumNetworkPolicy CRD accordingly. Also applicable values for this
   attribute are changed to ``disabled``, ``required`` and ``test-always-fail``.
+* Deny policies are now stable because of a fix to Cilium's internal CIDR policy
+  enforcement logic. Previously, a CIDR-based allow-policy would always allow traffic,
+  even if there was CIDR-based deny-policy in place that should have overridden it. Please
+  check all of your CIDR-based deny and allow policies to ensure that your cluster is not
+  accidentally relying on an allow-policy that should not work and will no longer work
+  after upgrading to 1.14.
 
 Removed Options
 ~~~~~~~~~~~~~~~
