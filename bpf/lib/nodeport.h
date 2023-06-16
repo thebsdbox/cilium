@@ -1450,6 +1450,11 @@ static __always_inline int nodeport_snat_fwd_ipv4(struct __ctx_buff *ctx,
 	 */
 	ctx_snat_done_set(ctx);
 
+#if defined(ENABLE_EGRESS_GATEWAY)
+	if (target.egress_gateway)
+		return egress_gw_fib_lookup_and_redirect(ctx, target.addr, ext_err);
+#endif
+
 	return ret;
 }
 
@@ -2729,7 +2734,8 @@ int tail_handle_snat_fwd_ipv4(struct __ctx_buff *ctx)
 		return send_drop_notify_error_ext(ctx, 0, ret, ext_err,
 						  CTX_ACT_DROP, METRIC_EGRESS);
 
-	send_trace_notify(ctx, obs_point, 0, 0, 0, 0, TRACE_REASON_UNKNOWN, 0);
+	if (ret == CTX_ACT_OK)
+		send_trace_notify(ctx, obs_point, 0, 0, 0, 0, TRACE_REASON_UNKNOWN, 0);
 
 	return ret;
 }
