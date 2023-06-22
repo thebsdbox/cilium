@@ -550,6 +550,7 @@ jobs:
               # subsequent connectivity tests with --include-upgrade-test to catch any
               # interruption in such flows.
               ./cilium-cli connectivity test --include-upgrade-test --upgrade-test-setup
+              sleep 60
               EXTRA_CONNECTIVITY_TEST=" --include-upgrade-test"
             fi
 
