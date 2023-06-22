@@ -603,6 +603,19 @@ jobs:
 
             ./contrib/scripts/kind-down.sh
 
+      - name: Run logs
+        if: ${{ !success() }}
+        uses: cilium/little-vm-helper@d04a0cf0ee684b1b249a320a0a6030ffda5eef30 # v0.0.5
+        with:
+          provision: 'false'
+          cmd: |
+            echo "!!! CLIENT !!!"
+            kubectl -n cilium-test logs deployment/migrate-svc-client
+            echo "!!! SERVER !!!"
+            kubectl -n cilium-test logs deployment/migrate-svc-server
+            echo "!!! SERVICE !!!"
+            kubectl -n cilium-test endpoints migrate-svc
+
       - name: Fetch artifacts
         if: ${{ !success() }}
         uses: cilium/little-vm-helper@af4173a4a1c9132b7fb0a02dba74cd6233a175b5 # v0.0.6
