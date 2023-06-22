@@ -606,11 +606,11 @@ jobs:
           provision: 'false'
           cmd: |
             echo "!!! CLIENT !!!"
-            kubectl -n cilium-test logs deployment/migrate-svc-client
+            kubectl -n cilium-test logs deployment/test-conn-disrupt-client
             echo "!!! SERVER !!!"
-            kubectl -n cilium-test logs deployment/migrate-svc-server
+            kubectl -n cilium-test logs deployment/test-conn-disrupt-server
             echo "!!! SERVICE !!!"
-            kubectl -n cilium-test endpoints migrate-svc
+            kubectl get endpoints migrate-svc -n cilium-test 
 
       - name: Fetch artifacts
         if: ${{ !success() }}
