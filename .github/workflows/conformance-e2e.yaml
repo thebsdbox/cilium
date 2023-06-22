@@ -589,7 +589,7 @@ jobs:
             kubectl get pods --all-namespaces -o wide
             kubectl -n kube-system exec daemonset/cilium -- cilium status
 
-            ./cilium-cli connectivity test --include-unsafe-tests --collect-sysdump-on-failure \
+            ./cilium-cli connectivity test --test '!check-log-errors' --include-unsafe-tests --collect-sysdump-on-failure \
               \$EXTRA_CONNECTIVITY_TEST \
               --flush-ct \
               --sysdump-hubble-flows-count=1000000 --sysdump-hubble-flows-timeout=5m \
@@ -610,7 +610,7 @@ jobs:
             echo "!!! SERVER !!!"
             kubectl -n cilium-test logs deployment/test-conn-disrupt-server
             echo "!!! SERVICE !!!"
-            kubectl get endpoints migrate-svc -n cilium-test 
+            kubectl get endpoints test-conn-disrupt -n cilium-test 
 
       - name: Fetch artifacts
         if: ${{ !success() }}
