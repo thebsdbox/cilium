@@ -530,7 +530,6 @@ jobs:
 
             CILIUM_CLI_MODE=helm ./cilium-cli install \
               --version ${{ env.upgrade_cilium_from_vsn }} \
-              --repository oci://quay.io/cilium-charts-dev/cilium \
               ${{ steps.vars.outputs.cilium_install_defaults }} \
               \$EXTRAS_V13
 
@@ -585,7 +584,6 @@ jobs:
 
             CILIUM_CLI_MODE=helm ./cilium-cli upgrade \
               --version ${{ env.upgrade_cilium_from_vsn }} \
-              --repository oci://quay.io/cilium-charts-dev/cilium \
               ${{ steps.vars.outputs.cilium_install_defaults }} \
               \$EXTRAS_V13
 
