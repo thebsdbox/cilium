@@ -253,8 +253,6 @@ jobs:
             tunnel: 'vxlan'
             encryption: 'ipsec'
             encryption-node: 'false'
-            test-upgrade: 'true'
-            test-flow-interrupts: 'true'
 
           - name: '10'
             kernel: '5.4-20230420.212204'
@@ -551,6 +549,7 @@ jobs:
               # interruption in such flows.
               ./cilium-cli connectivity test --include-upgrade-test --upgrade-test-setup
               sleep 60
+              ./cilium-cli connectivity test --include-upgrade-test --upgrade-test-setup
               EXTRA_CONNECTIVITY_TEST=" --include-upgrade-test"
             fi
 
